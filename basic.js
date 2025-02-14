@@ -1,17 +1,20 @@
+require('dotenv').config();
+
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://nisham2522:Y3cSidKuvsIC1qro@cluster0.mgif8.mongodb.net/")
+const mongoURI = process.env.MANGO_URI;
+mongoose.connect(mongoURI)
 
 const User1 = mongoose.model('users', { name: String, email: String, password: String });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const name = req.body.name;
 
     const existingUser1 = await User1.findOne({ email: username});
     if(existingUser1) {
-        return res.status(400).send({ "username already exists" });
+        return res.status(400).send({ "error": "username already exists" });
     }
 
     const user = new User1({
